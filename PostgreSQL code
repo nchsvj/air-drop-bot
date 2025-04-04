@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS users (
+    user_id BIGINT PRIMARY KEY,
+    username TEXT,
+    first_name TEXT,
+    last_name TEXT,
+    balance INTEGER DEFAULT 0,
+    correct_answers INTEGER DEFAULT 0,
+    total_questions INTEGER DEFAULT 0,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_answers (
+    id SERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES users(user_id),
+    question TEXT,
+    answer TEXT,
+    is_correct BOOLEAN,
+    level TEXT,
+    answered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
