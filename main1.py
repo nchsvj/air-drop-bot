@@ -48,10 +48,6 @@ cur = conn.cursor()
 
 
 
-conn = get_db_connection()
-cur = conn.cursor()
-
-
 # Загрузка задач
 def load_tasks():
     try:
@@ -77,8 +73,6 @@ def load_tasks():
 
 TASKS = load_tasks()
 
-
-TASKS = load_tasks()
 
 # Состояния пользователей
 user_states: Dict[int, Dict[str, Any]] = {}
