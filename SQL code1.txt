@@ -1,0 +1,50 @@
+CREATE TABLE IF NOT EXISTS users (
+    user_id BIGINT PRIMARY KEY,
+    username TEXT,
+    first_name TEXT,
+    last_name TEXT,
+    balance INTEGER DEFAULT 0,
+    correct_answers INTEGER DEFAULT 0,
+    total_questions INTEGER DEFAULT 0,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_airdrop TIMESTAMP,
+    pending_airdrop_level TEXT,
+    pending_airdrop_question TEXT
+);
+ALTER TABLE users ADD COLUMN IF NOT EXISTS airdrops_today INTEGER DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS airdrop_reset_date DATE DEFAULT CURRENT_DATE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS daily_airdrop_limit INTEGER DEFAULT 0;
+ALTER TABLE users ADD COLUMN require_captcha BOOLEAN DEFAULT FALSE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS device_fingerprint JSONB;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS is_suspicious BOOLEAN DEFAULT FALSE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS last_ip TEXT;
+
+CREATE TABLE IF NOT EXISTS user_answers (
+    id SERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES users(user_id),
+    question TEXT,
+    answer TEXT,
+    is_correct BOOLEAN,
+    level TEXT,
+    answered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS airdrop_schedule (
+    id SERIAL PRIMARY KEY,
+    scheduled_time TIME NOT NULL
+);
+
+INSERT INTO airdrop_schedule (scheduled_time) VALUES
+('10:00:00'),
+('13:00:00'),
+('17:00:00'),
+('22:00:00'),
+('04:00:00')
+ON CONFLICT DO NOTHING;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS daily_airdrop_limit INTEGER DEFAULT 0;
+
+DROP TABLE users, user_answers;
+DROP TABLE airdrop_schedule;
+
+SELECT * FROM users;
+UPDATE users SET balance = 0, correct_answers = 0, total_questions = 0 WHERE user_id = 1;
